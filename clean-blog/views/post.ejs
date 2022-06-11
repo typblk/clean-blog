@@ -1,0 +1,46 @@
+<%- include('partials/_header.ejs') %>
+
+<%- include('partials/_navigation.ejs') %>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('/img/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h2><%= blog.name %></h2>
+                        <span class="meta">Posted by <a href="/about"><%= blog.user.name %></a></span>
+
+                        <% if(user.role==='sign' ) { %>
+                            <% if (user && !(user.blogs.includes(blog._id))) { %>
+                                <form method="POST" action="/blogs/save">
+                                    <input type="hidden" name="blog_id" value="<%= blog._id %>">
+                                    <button style="margin-top: 30px;" class="btn btn-primary">Save</button>
+                                </form>
+                            <% } %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+                    <img class="img-responsive" src="<%= blog.image %>" alt="">
+                    
+                    <p><%- blog.description %></p>
+ 
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <hr>
+
+    <%- include('partials/_footer.ejs') %>

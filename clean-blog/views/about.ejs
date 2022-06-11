@@ -1,0 +1,37 @@
+<%- include('partials/_header.ejs') %>
+
+<%- include('partials/_navigation.ejs') %>
+
+
+<% for (let i=0; i< abouts.length; i++) { %>
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('<%= abouts[i].image %>')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="page-heading">
+                        <h1>About Me</h1>
+                        <hr class="small">
+                        <span class="subheading"><%= abouts[i].slogan %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h2><%= abouts[i].name %></h2>
+                <p><%= abouts[i].description %></p>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+<% } %>
+
+    <%- include('partials/_footer.ejs') %>

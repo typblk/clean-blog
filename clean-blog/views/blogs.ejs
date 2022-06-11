@@ -1,0 +1,83 @@
+<%- include('partials/_header.ejs') %>
+
+<%- include('partials/_navigation.ejs') %>
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>Blogs</h1>
+                        <hr class="small">
+                        <span class="subheading">A Clean Blog</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-8">
+
+                <% for (let i=0; i< blogs.length; i++) { %>
+                
+                <div class="row">
+                    <div class="col-xs-4" style="margin-top: 35px;" >
+                        <a href="/blogs/<%= blogs[i].slug %>">
+                            <img class="img-responsive" src="<%= blogs[i].image %>" alt="">
+                        </a>
+                    </div>
+                    <div class="col-xs-8 post-preview">
+                        <a href="/blogs/<%= blogs[i].slug %>">
+                            <h2 class="post-title">
+                                <%= blogs[i].name %>
+                            </h2>
+                            <h3 class="post-subtitle">
+                                <%- blogs[i].description.substring(0,60) + "..." %>
+                            </h3>
+                        </a>
+                        <% for (let i=0; i< abouts.length; i++) { %>
+                        <p class="post-meta">Posted by <a href="/about"><%= abouts[i].name %></a> </p>
+                        <% } %>
+                    </div>
+                </div>
+                <hr>
+                <% } %>
+               
+
+            </div>
+            <div style="padding-top: 10px; padding-left: 80px;" class="col-sm-4">
+                <div>
+                    <form method="GET" action="/blogs" class="form-inline">
+                        <div class="col-xs-8 form-group">
+                          <input type="text" name="search" class="form-control" id="exampleInputEmail2" placeholder="search...">
+                        </div>
+                        <div class="col-xs-4">
+                            <button type="submit" value="Search" class="btn btn-primary btn-sm">Search</button>
+                        </div>
+                    </form>
+                </div>
+                <div style="margin-top: 80px;">
+                    <h2>Categories</h2>
+                    <hr>
+                    <ul class="list-unstyled">
+
+                        <% for (let i=0; i< categories.length; i++) { %>
+                        <li class="post-preview"><a href="/blogs?categories=<%= categories[i].slug %>"><%= categories[i].name %></a></li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <%- include('partials/_footer.ejs') %>
+
+   

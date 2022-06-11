@@ -1,0 +1,396 @@
+<%- include('partials/_header.ejs') %>
+
+    <% if(user.role==='sign' ) { %>
+
+        <%- include('partials/_navigation.ejs') %>
+
+            <!-- Page Header -->
+            <!-- Set your background image for this header on the line below. -->
+            <header class="intro-header" style="background-image: url('/img/home-bg.jpg')">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                            <div class="site-heading">
+                                <h1>
+                                    <%= user.name %>
+                                </h1>
+                                <hr class="small">
+                                <span class="subheading">My Account</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8">
+
+                        <% for (let i=0; i< user.blogs.length; i++) { %>
+
+                            <div class="row">
+                                <div class="col-xs-4" style="margin-top: 35px;">
+                                    <a href="/blogs/<%= user.blogs[i].slug %>">
+                                        <img class="img-responsive" src="<%= user.blogs[i].image %>" alt="">
+                                    </a>
+                                </div>
+                                <div class="col-xs-8 post-preview">
+                                    <a href="/blogs/<%= user.blogs[i].slug %>">
+                                        <h2 class="post-title">
+                                            <%= user.blogs[i].name %>
+                                        </h2>
+                                        <h3 class="post-subtitle">
+                                            <%= user.blogs[i].description.substring(0,60) + "..." %>
+                                        </h3>
+                                    </a>
+                                    <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on September 24, 2014
+                                    </p>
+                                    <form method="POST" action="/blogs/release">
+                                        <input type="hidden" name="blog_id" value="<%= user.blogs[i]._id %>">
+                                        <button style="margin-top: 10px;" class="btn btn-danger">Release</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr>
+                            <% } %>
+
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+
+
+            <% } %>
+
+
+                <% if(user.role==='admin' ) { %>
+
+
+                    <body>
+
+                        <!-- Navigation -->
+                        <div class="container">
+                            <div class="row">
+                                <nav class="navbar navbar-default">
+                                    <div class="container-fluid">
+                                      <!-- Brand and toggle get grouped for better mobile display -->
+                                      <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                                          <span class="sr-only">Toggle navigation</span>
+                                          <span class="icon-bar"></span>
+                                          <span class="icon-bar"></span>
+                                          <span class="icon-bar"></span>
+                                        </button>
+                                        <a class="navbar-brand" href="#">Dashboard</a>
+                                      </div>
+                                  
+                                      <!-- Collect the nav links, forms, and other content for toggling -->
+                                      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                        <ul class="nav navbar-nav navbar-right">
+                                          <li><a href="/">My Website</a></li>
+                                          <li><a href="/users/logout">Logouth</a></li>
+                                        </ul>
+                                      </div><!-- /.navbar-collapse -->
+                                    </div><!-- /.container-fluid -->
+                                  </nav>
+                            </div>
+                        </div>
+
+
+                        <div class="container">
+                            <div class="row">
+
+                                <div class="col-sm-3 btn-group-vertical">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#myModal">Create Blog</button>
+                                    <a href="#categories" class="btn btn-primary" type="button">Categories</a>
+                                    <a href="#users" class="btn btn-primary" type="button">Users</a>
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#about">About</button>
+                                </div>
+
+                                <div style="padding-top: 10px; padding-left: 40px;" class="col-sm-9">
+
+                                    <% if (flashMessages) { %>
+                                        <% if (flashMessages.success) { %>
+                                            <div class="alert alert-success" role="alert">
+                                                <%= flashMessages.success %>
+                                            </div>
+
+                                            <% } else if (flashMessages.error) { %>
+                                                <div class="alert alert-danger" role="alert">
+                                                    <%= flashMessages.error %>
+                                                </div>
+                                                <% } %>
+                                                    <% } %>
+
+                                                    <h3>Blogs</h3>
+
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Id</th>
+                                                                    <th scope="col">Image</th>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% for (let i=0; i< blogs.length; i++) { %>
+                                                                    <tr>
+                                                                        <th scope="row">
+                                                                            <%= blogs[i].id %>
+                                                                        </th>
+                                                                        <td><img src="<%= blogs[i].image %>" width="100"
+                                                                                alt=""></td>
+                                                                        <td>
+                                                                            <%= blogs[i].name %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <ul class="list-inline btn-group-justified">
+                                                                                <li><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#update<%= blogs[i]._id %>"><span>Update</span></button></li>
+                                                                                <li><a href="/blogs/<%= blogs[i].slug %>?_method=DELETE" onclick="return confirm('ARE YOU SURE')" class="btn btn-danger btn-sm"><span>Delete</span></a></li>
+                                                                            </ul>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <!-- Modal -->
+                        <div class="modal fade" id="update<%= blogs[i]._id %>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="/blogs/<%= blogs[i].slug %>?_method=PUT" enctype="multipart/form-data">
+                                            <div class="form-group">
+                                                <img src="<%= blogs[i].image %>" width="100"alt="">
+                                                <input type="file" name="image" id="exampleInputFile">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="hidden" name="role" class="form-control"  value="<%= user.role %>">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="exampleInputEmail1">Blog Name</label>
+                                              <input type="text" name="name" class="form-control" id="exampleInputEmail1" value="<%= blogs[i].name %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Blog Category</label>
+                                                <select class="form-select" name="category" id="inputGroupSelect02">
+                                                    <% for (let i=0; i< categories.length; i++) { %>
+                                                        <option value="<%= categories[i]._id %>">
+                                                            <%= categories[i].name %>
+                                                        </option>
+                                                        <% } %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Blog Description</label>
+                                                <textarea name="description" class="form-control" id="editorr"
+                                                    rows="6" required><%= blogs[i].description %></textarea>
+                                            </div>
+                                            
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Create Blog</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                                                                    <% } %>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <h3 id="categories" style="margin-top: 100px;">Categories</h3>
+
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Id</th>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">
+                                                                        <button class="btn btn-success" type="button" data-toggle="modal" data-target="#category">Add</button>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% for (let i=0; i< categories.length; i++) { %>
+                                                                    <tr>
+                                                                        <th scope="row">
+                                                                            <%= categories[i]._id %>
+                                                                        </th>
+                                                                        <td><%= categories[i].name %></td>
+                                                                        
+                                                                        <td>
+                                                                            <ul class="list-inline text-center btn-group-justified">
+                                                                                <li><a href="/categories/<%= categories[i]._id %>?_method=DELETE" onclick="return confirm('ARE YOU SURE')" class="btn btn-danger btn-sm"><span>Delete</span></a></li>
+                                                                            </ul>
+                                                                        </td>
+                                                                    </tr>
+                                                                <% } %>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <h3 id="users" style="margin-top: 100px;">Users</h3>
+
+                                                        <table class="table table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Id</th>
+                                                                    <th scope="col">email</th>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">Delete</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% for (let i=0; i< users.length; i++) { %>
+                                                                    <tr>
+                                                                        <th scope="row">
+                                                                            <%= users[i]._id %>
+                                                                        </th>
+                                                                        <td><%= users[i].email %></td>
+                                                                        <td>
+                                                                            <%= users[i].name %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <ul class="list-inline text-center btn-group-justified">
+                                                                                <li><a href="/users/<%= users[i]._id %>?_method=DELETE" onclick="return confirm('ARE YOU SURE')" class="btn btn-danger btn-sm"><span>Delete</span></a></li>
+                                                                            </ul>
+                                                                        </td>
+                                                                    </tr>
+                                                                <% } %>
+                                                            </tbody>
+                                                        </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="category" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="/categories" enctype="multipart/form-data">
+                                            
+                                            <div class="form-group">
+                                              <label for="exampleInputEmail1">Category Name</label>
+                                              <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="Category Name">
+                                            </div>
+                                            
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Create Blog</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="/blogs" enctype="multipart/form-data">
+                                            <div class="form-group">
+                                                <label for="exampleInputFile">Blog İmage</label>
+                                                <input type="file" name="image" id="exampleInputFile">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="hidden" name="role" class="form-control"  value="<%= user.role %>">
+                                            </div>
+                                            <div class="form-group">
+                                              <label for="exampleInputEmail1">Blog Name</label>
+                                              <input type="text" name="name" class="form-control" id="exampleInputEmail1" placeholder="Blog Name">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Blog Category</label>
+                                                <select class="form-select" name="category" id="inputGroupSelect02">
+                                                    <% for (let i=0; i< categories.length; i++) { %>
+                                                        <option value="<%= categories[i]._id %>">
+                                                            <%= categories[i].name %>
+                                                        </option>
+                                                        <% } %>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Blog Description</label>
+                                                <textarea name="description" class="form-control" id="editor"
+                                                    rows="6"></textarea>
+                                            </div>
+                                            
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Create Blog</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <% for (let i=0; i< abouts.length; i++) { %>
+                        <!-- Modal -->
+                        <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="/about?_method=PUT" enctype="multipart/form-data">
+                                        
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">İmage</label>
+                                                <input type="file" name="image" class="form-control" id="exampleInputEmail1">
+                                              </div>
+                                            <div class="form-group">
+                                              <label for="exampleInputEmail1">Name</label>
+                                              <input type="text" name="name" class="form-control" id="exampleInputEmail1" value="<%= abouts[i].name %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Slogan</label>
+                                                <input type="text" name="slogan" class="form-control" id="exampleInputEmail1" value="<%= abouts[i].slogan %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">About</label>
+                                                <textarea name="description" class="form-control"
+                                                    rows="6" required><%= abouts[i].description %></textarea>
+                                            </div>
+                                            
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+
+                        <% } %>
+
+                            <%- include('partials/_footer.ejs') %>
